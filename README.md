@@ -10,7 +10,10 @@ Solutions to **CodInClub (BridgeLabz) Week 1 Assignment — 5 Problems**.
 3. [Problem 3: The Traffic Signal Streak Analyzer](#problem-3-the-traffic-signal-streak-analyzer)
 4. [Problem 4: The Warehouse Inventory Balancer](#problem-4-the-warehouse-inventory-balancer)
 5. [Problem 5: The Movie Review Word Length Profiler](#problem-5-the-movie-review-word-length-profiler)
-6. [Compilation & Execution](#compilation--execution)
+6. [Category A · Problem 5: Cancelling the k-th Last Order](#category-a--coding-assignment--problem-5-cancelling-the-k-th-last-order)
+7. [Category A · Problem 6: Campus Portal Browser History](#category-a--coding-assignment--problem-6-campus-portal-browser-history)
+8. [Category A · Railway Counter Ticket Merge](#category-a--coding-assignment--railway-counter-ticket-merge)
+9. [Compilation & Execution](#compilation--execution)
 
 ---
 
@@ -210,4 +213,87 @@ When $k = \text{length}$ (removing the head):
 javac CancellingKthLastOrder.java
 java CancellingKthLastOrder
 ```
+
+---
+
+## Category A · Coding Assignment — Problem 6: Campus Portal Browser History
+
+### Scenario
+A campus portal browser opens on a home page and supports three actions:
+1. `visit(url)`: visits a new page (which clears all forward history)
+2. `back(steps)`: goes back up to $x$ pages (stops at home page)
+3. `forward(steps)`: goes forward up to $x$ pages (stops at latest page)
+
+### Task
+- Design a `BrowserHistory` class backed by your own doubly linked list.
+- Use your own node class (`class BrowserNode { String url; BrowserNode prev, next; }`).
+- Do not use `java.util.LinkedList` or other collections for the list itself.
+
+### Constraints
+- $1 \le \text{number of actions} \le 5000$
+- $1 \le \text{steps} \le 100$
+- `visit` is $\mathcal{O}(1)$; `back` and `forward` are $\mathcal{O}(\text{steps})$.
+
+### Sample Trace & Output
+- `home = "srm.edu"`
+- Actions: `visit a.com`, `visit b.com`, `visit c.com`, `back 1`, `back 1`, `forward 1`, `visit d.com`, `forward 2`, `back 2`, `back 7`
+- **Expected Output:** `b.com, a.com, b.com, d.com, a.com, srm.edu`
+
+### Complexity Analysis
+- `visit(url)`: $\mathcal{O}(1)$ time, $\mathcal{O}(1)$ space.
+- `back(steps)`: $\mathcal{O}(\min(\text{steps}, \text{distance to home}))$ time.
+- `forward(steps)`: $\mathcal{O}(\min(\text{steps}, \text{distance to latest}))$ time.
+- Space Complexity: $\mathcal{O}(N)$ where $N$ is the number of active history pages.
+
+### Discarding Forward History Explanation
+When `visit(url)` is invoked:
+- `current.next` is pointed to the newly created node.
+- The reference to the existing forward node chain is severed.
+- In Java, unreferenced forward nodes become unreachable and are automatically reclaimed by the Garbage Collector (GC).
+
+### Compilation & Execution
+```bash
+javac BrowserHistory.java
+java BrowserHistory
+```
+
+---
+
+## Category A · Coding Assignment — Railway Counter Ticket Merge
+
+### Scenario
+Two railway counters each produce a singly linked list of ticket numbers in ascending order. At closing time, both lists must be combined into one ascending list.
+
+### Task
+- Implement `TicketNode mergeSorted(TicketNode a, TicketNode b)` that merges the lists by relinking existing nodes in ascending order and returns the new head.
+- Duplicates are preserved.
+- Use your own node class (`class TicketNode { int data; TicketNode next; }`).
+- Do not use `java.util.LinkedList` or other collections for the list itself.
+
+### Constraints
+- $0 \le \text{length of each list} \le 10^5$
+- **No new nodes may be created** (a single dummy node is allowed).
+
+### Sample Input & Output
+| Sample | Input Lists | Expected Output |
+| :--- | :--- | :--- |
+| **Sample 1** | `a = 3 -> 8 -> 15`, `b = 5 -> 8 -> 12 -> 20` | `3 -> 5 -> 8 -> 8 -> 12 -> 15 -> 20` |
+| **Sample 2** | `a = (empty)`, `b = 4` | `4` |
+
+### Complexity Analysis & Comparison with Array Sorting
+1. **In-place Merge (Implemented):**
+   - **Time Complexity:** $\mathcal{O}(m + n)$ — Each comparison advances a list pointer; linear and optimal.
+   - **Space Complexity:** $\mathcal{O}(1)$ auxiliary space — Only 1 dummy node is used; nodes are relinked in-place.
+   - **Node Creation:** $0$ new nodes created, respecting the strict problem constraint.
+2. **Comparison with Array Copy & Sort:**
+   - **Time:** Copying to an array and sorting takes $\mathcal{O}((m + n) \log(m + n))$ time, which is strictly slower than $\mathcal{O}(m + n)$.
+   - **Space:** Requires $\mathcal{O}(m + n)$ extra heap memory for the array.
+   - **Constraint Violation:** Recreating a linked list from the sorted array requires instantiating $m + n$ new nodes, violating the constraint: *"No new nodes may be created"*.
+
+### Compilation & Execution
+```bash
+javac RailwayTicketMerger.java
+java RailwayTicketMerger
+```
+
 
