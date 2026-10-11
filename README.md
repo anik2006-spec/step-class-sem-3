@@ -164,3 +164,50 @@ java WarehouseInventoryBalancer
 javac MovieReviewWordLengthProfiler.java
 java MovieReviewWordLengthProfiler
 ```
+
+---
+
+## Category A · Coding Assignment — Problem 5: Cancelling the k-th Last Order
+
+### Scenario
+A restaurant keeps today's orders in a singly linked list, newest at the end. A customer cancels the order that is $k$-th from the end.
+
+### Task
+- Implement `Node removeKthFromEnd(Node head, int k)` that removes that node in a single pass and returns the head.
+- Use your own node class (e.g., `class Node { int data; Node next; }`).
+- Do not use `java.util.LinkedList` or other collections for the list itself.
+
+### Method Signature
+```java
+public static Node removeKthFromEnd(Node head, int k)
+```
+
+### Constraints
+- $1 \le k \le \text{length of list} \le 10^4$
+- Single pass only
+
+### Sample Input & Output
+| Sample | Input Orders & $k$ | Expected Output |
+| :--- | :--- | :--- |
+| **Sample 1** | `orders = 10 -> 20 -> 30 -> 40 -> 50, k = 2` | `10 -> 20 -> 30 -> 50` |
+| **Sample 2** | `orders = 10 -> 20 -> 30 -> 40 -> 50, k = 5` | `20 -> 30 -> 40 -> 50` |
+
+### Complexity Analysis
+- **Time Complexity:** $O(N)$ — Single pass traversal where $N$ is the number of nodes in the linked list.
+- **Space Complexity:** $O(1)$ — In-place pointer manipulation with constant auxiliary memory.
+
+### Head Removal Explanation (Without Special Case)
+A dummy node (`dummy.next = head`) is introduced before the head.
+The `lead` pointer starts at `dummy` and advances $k + 1$ steps ahead of `trailing` (also starting at `dummy`).
+When $k = \text{length}$ (removing the head):
+1. `lead` advances $\text{length} + 1$ steps, falling off the end (`lead == null`).
+2. The `while (lead != null)` loop doesn't execute, so `trailing` stays at `dummy`.
+3. `trailing.next = trailing.next.next` seamlessly bypasses the head (`dummy.next = dummy.next.next`).
+4. Returning `dummy.next` yields the new head without any special branch (`if (k == length)`).
+
+### Compilation & Execution
+```bash
+javac CancellingKthLastOrder.java
+java CancellingKthLastOrder
+```
+
